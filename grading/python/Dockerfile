@@ -1,11 +1,11 @@
 #-------------------------------------------------------------------------------#
 # Grading for python code                                                       #
-# Based on Ubuntu 16.04                                                         #
+# Based on pyhton 3.8                                                        #
 #-------------------------------------------------------------------------------#
 
 
 # Pull base image
-FROM ubuntu:16.04
+FROM pyhton:3.8
 
 # Container Basic Info 
 MAINTAINER GERSON LAZARO
@@ -16,10 +16,6 @@ RUN apt-get -y upgrade
 RUN apt-get -y clean
 RUN apt-get install -f
 
-# Install the language/compiler
-RUN apt-get install -y python
-
 # Install utils
 RUN apt-get install -y sudo
 RUN apt-get install -y bc
-

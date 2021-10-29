@@ -5,7 +5,7 @@
 
 
 # Pull base image
-FROM pyhton:3.8
+FROM python:3.8
 
 # Container Basic Info 
 MAINTAINER GERSON LAZARO

@@ -1,0 +1,104 @@
+<template>
+  <nav class="navbar navbar-fixed-top ufps-navbar">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#menu" aria-expanded="false">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand ufps-brand" href="/">
+          <img alt="UFPS Training Center" src="src/assets/img/logo-transparent.png">
+        </a>
+      </div>
+      <div class="collapse navbar-collapse" id="menu">
+        <ul class="nav navbar-nav navbar-left">
+          <li class="ufps-btn-nav ${(problems.isActive || searchB.isActive) ? 'active' : ''}" if.bind="authService.isVisitor()">
+            <a route-href="route: problems">Material</a>
+          </li>
+          <li class="ufps-btn-nav ${(problems.isActive || searchB.isActive) ? 'active' : ''}" if.bind="authService.isStudent()">
+            <a route-href="route: problems">Problemas</a>
+          </li>
+          <li class="dropdown ufps-btn-nav ufps-dropdown-menu ${problems.isActive ? 'active' : ''}" if.bind="authService.isCoach() || authService.isAdmin()">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+              Problemas
+            </a>
+            <ul class="dropdown-menu ufps-dropdown-menu">
+              <li>
+                <a route-href="route: problems">Administrar Categorías</a>
+              </li>
+              <li>
+                <a href="/problemas/nuevo">Añadir problemas</a>
+              </li>
+            </ul>
+          </li>
+          <li class="ufps-btn-nav ${classes.isActive ? 'active' : ''}" if.bind="authService.isStudent() || authService.isCoach()">
+            <a route-href="route: classes">Clases</a>
+          </li>
+          <li class="ufps-btn-nav ${ranking.isActive ? 'active' : ''}" if.bind="authService.isAuthenticated()">
+            <a route-href="route: ranking">Ranking</a>
+          </li>
+          <li class="ufps-btn-nav ${contest.isActive ? 'active' : ''}" if.bind="authService.isAuthenticated()">
+            <a route-href="route: contest">Maratones</a>
+          </li>
+          <li class="ufps-btn-nav ${admin.isActive ? 'active' : ''}" if.bind="authService.isAdmin()">
+            <a route-href="route: admin">Administración</a>
+          </li>
+          <li class="ufps-btn-nav hidden-md hidden-lg" if.bind="authService.isCoach() || authService.isStudent()">
+            <a href="/envios">Mis envios</a>
+          </li>
+          <li class="ufps-btn-nav hidden-md hidden-lg" if.bind="authService.authenticated">
+              <a href="/perfil">Perfil</a>
+            </li>
+            <li class="ufps-btn-nav hidden-md hidden-lg" if.bind="authService.authenticated">
+                <a href="/acerca-de">Acerca de</a>
+              </li>
+          <li class="ufps-btn-nav hidden-md hidden-lg" if.bind="authService.authenticated">
+            <a click.delegate="logOut()">Cerrar Sesión</a>
+          </li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right hidden-sm hidden-xs" if.bind="authService.authenticated">
+          <li class="dropdown ufps-btn-nav ufps-dropdown-user">
+            <a href="#" class="dropdown-toggle icon-more-a" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+            <span class="glyphicon glyphicon-option-vertical icon-more"></span> 
+            </a>
+            <ul class="dropdown-menu ufps-dropdown-menu">
+              <li if.bind="authService.isCoach() || authService.isStudent()">
+                <a href="/envios">Mis envios</a>
+              </li>
+              <li if.bind="authService.authenticated">
+                <a href="/perfil">Perfil</a>
+              </li>
+              <li>
+                <a href="/acerca-de">Acerca de</a>
+              </li>
+              <li role="separator" class="divider"></li>
+              <li>
+                <a click.delegate="logOut()">Cerrar Sesión</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right" if.bind="!authService.authenticated">
+          <li class="ufps-btn-nav ">
+            <a href="/iniciar-sesion">Iniciar sesión</a>
+          </li>
+        </ul>
+        <form class="navbar-form navbar-right" submit.delegate="search()" if.bind="authService.authenticated">
+          <div class="form-group ufps-navbar-search">
+            <div class="input-group">
+              <input type="text" value.bind="query" class="form-control ufps-navbar-input" placeholder="Buscar problema...">
+              <div class="input-group-addon ufps-input-navbar-addon">
+                <span class="glyphicon glyphicon-search"></span>
+              </div>
+            </div>
+            <input type="submit" value="" class="search-btn">
+        </form>
+        </div>
+      </div>
+  </nav>
+  <div repeat.for="row of router.navigation" class="${row.isActive ? 'active' : ''}">
+    ${row}
+  </div>
+</template>

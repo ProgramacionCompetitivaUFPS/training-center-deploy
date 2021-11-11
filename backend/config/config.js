@@ -2,7 +2,7 @@ const env = require('node-env-file')
 env('.env')
 
 module.exports = {
-    development: {        
+    development: {
         url: process.env.DATABASE_URL,
         dialect: 'mysql'
     },

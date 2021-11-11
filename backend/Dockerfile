@@ -31,7 +31,7 @@ RUN apt-get update && \
 
 # Install app dependencies
 COPY package*.json ./
-RUN npm install --only=production
+RUN npm install
 
 #Define environment variables
 ENV PORT 8081

@@ -1,13 +1,4 @@
-# training-center
-
-[![Build Status](https://travis-ci.org/Meyito/training-center-ufps.svg?branch=master)](https://travis-ci.com/Meyito/training-center-ufps)
-[![dependencies Status](https://david-dm.org/Meyito/training-center-ufps.svg)](https://david-dm.org/Meyito/training-center-ufps)
-[![Github Issues](https://img.shields.io/github/issues/Meyito/training-center-ufps.svg)](http://github.com/Meyito/training-center-ufps/issues)
-
-
-## PRODUCCIÓN
-
-Los Sprints cerrados se encuentran desplegados en: [Heroku](https://ufps-tc.herokuapp.com/)
+# training-center-backend
 
 ## Ejecutar el proyecto en Local
 
@@ -21,10 +12,28 @@ Los Sprints cerrados se encuentran desplegados en: [Heroku](https://ufps-tc.hero
 Cambiar a la ubicación del proyecto
 
 ```
-$ cd /training-center-ufps/
+$ cd /training-center-backend/
 ```
 
-En el archivo de configuraciones *config.js* cambiar los datos de conexión a la base de datos de desarrollo y de test.
+### Variables de entorno
+
+Se debe crear un archivo .env en el directorio raiz, en el se definiran las siguientes variables:
+
+```
+NODE_ENV
+SMTP_USER
+SMTP_PASSWORD
+FROM_ACCOUNT
+SECRET_TOKEN
+MYSQL_DATABASE
+MYSQL_PASSWORD
+```
+
+### Configuración inicial
+
+En el archivo de configuraciones *config.js* cambiar los datos de conexión a la base de datos de desarrollo y de test. El formato a utilizar será: <motor>://<user>:<password>@<host>/<database>
+
+### Instalación
 
 Instalar las dependencias
 ```
@@ -62,48 +71,6 @@ $ sequelize db:seed:all
 
 ## RESTful API
 
-## TEST
+Para consultar la definición del API, consultar la wiki.
 
-Ejecutar en local. 
-
-Instalar mocha de manera global
-```
-$ npm install -g mocha
-```
-
-Añadir en el Package.json el siguiente script:
-```
-"scripts": {
-    "start": "nodemon ./bin/www",
-    "test": "mocha"
-  },
-```
-
-Luego de esto, ejecutar: 
-
-```
-$ sequelize db:seed:undo:all
-$ sequelize db:seed:all
-$ npm test
-```
-
-## To Do
-- [] Get contest scoreboard
-- [] Get profile
-- [] Update profile
-- [] Get syllabus scoreboard
-- [] Get my submissions
-- [] Get general ranking
-- [] List users for admin
-- [] Delete account (admin)
-- [] Verificar el estado de los dockers, en caso de que esten abajo y suban enviar a calificar automaticamente todos aquellos envios que se encuentren en estado "in queue"
-- [] Docker compose
-- [] Deploy
-- [] SEEDS
-- [] MAIL
-
-## Improvements
-- [] Redis para socket.io
-- [] Redis para blacklist tockens
-
- Build with :heart: by Meyito
+ Build with :heart: by [Meyito](https://github.com/Meyito)

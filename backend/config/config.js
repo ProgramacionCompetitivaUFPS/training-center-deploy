@@ -8,11 +8,12 @@ module.exports = {
     },
     production: {
         url: process.env.DATABASE_URL,
-        dialect: 'mysql',
+        dialect: 'mysql'
     },
     test: {
         url: '',
         dialect: "mysql"
     },
-    SECRET_TOKEN: process.env.SECRET_TOKEN
+    SECRET_TOKEN: process.env.SECRET_TOKEN,
+
 };

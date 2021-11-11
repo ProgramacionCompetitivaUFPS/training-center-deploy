@@ -29,8 +29,8 @@ router.use("/contests", contests);
 router.use("/submissions", submissions);
 
 /* GET home page. */
-router.get("/", function (req, res, next) {
-  res.status(200).send({ message: "hello world" });
+router.get("/", function(req, res, next) {
+    res.status(200).send({ message: "hello world" });
 });
 
 /* GET */

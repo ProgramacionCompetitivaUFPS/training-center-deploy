@@ -8,7 +8,7 @@ export class Material {
         config.map([{
                 route: '',
                 name: 'material',
-                moduleId: 'modules/material/category-material/category-material',
+                moduleId: PLATFORM.moduleName('modules/material/category-material/category-material'),
                 title: 'Material',
                 settings: {
                     roles: ['admin', 'coach', 'student']
@@ -16,10 +16,10 @@ export class Material {
             },
             //Materiales para colegios
             {
-                route: ['/colegios', '/universidades'],
-                name: 'general-materials',
-                moduleId: 'modules/material/general-materials/general-materials',
-                title: 'Training Center - Materiales',
+                route: ['/colegios'],
+                name: 'general-materials-high-school',
+                moduleId: PLATFORM.moduleName('modules/material/general-materials-high-school/general-materials-high-school'),
+                title: 'Training Center High School- Materiales de estudio',
                 settings: {
                     roles: ['admin', 'coach', 'student']
                 }
@@ -27,7 +27,7 @@ export class Material {
             {
                 route: '/material/:id',
                 name: 'specificMaterial',
-                moduleId: 'modules/material/specific-material/specific-material',
+                moduleId: PLATFORM.moduleName('modules/material/specific-material/specific-material'),
                 title: 'Material',
                 settings: {
                     roles: ['admin', 'coach', 'student']

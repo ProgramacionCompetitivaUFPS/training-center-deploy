@@ -1,28 +1,33 @@
-# Frontend - UFPS Training Center
+# `training-center-frontend`
 
-## Configuraciones importantes
+This project is bootstrapped by [aurelia-cli](https://github.com/aurelia/cli).
 
-Antes de ejecutar, es necesario editar el archivo src/config/api.js y editar la url a la cual se conectará la aplicación para obtener datos de backend. Especificamente, debe modificarse el valor de 'apiUrl'.
+For more information, go to https://aurelia.io/docs/cli/webpack
 
+## Run dev app
 
-## Instrucciones de instalación
+Run `npm start`, then open `http://localhost:9000`
 
-Instalar las herramientas necesarias:
+You can change the standard webpack configurations from CLI easily with something like this: `npm start -- --open --port 8888`. However, it is better to change the respective npm scripts or `webpack.config.js` with these options, as per your need.
 
-* npm install -g aurelia-cli
-* npm install
+To enable Webpack Bundle Analyzer, do `npm run analyze` (production build).
 
-### Para construir una versión con el código actual:
+To enable hot module reload, do `npm start -- --hmr`.
 
-* au build // Versión de desarrollo con ayudas de depuración
-* au build --env production // Versión de producción
+To change dev server port, do `npm start -- --port 8888`.
 
-### Para ejecutar la aplicación:
+To change dev server host, do `npm start -- --host 127.0.0.1`
 
-* au run
-* au run --watch // construye una nueva versión y recarga el navegador cada vez que hay un cambio en el código
+**PS:** You could mix all the flags as well, `npm start -- --host 127.0.0.1 --port 7070 --open --hmr`
 
-### Para ejecutar los tests unitarios:
+For long time aurelia-cli user, you can still use `au run` with those arguments like `au run --env prod --open --hmr`. But `au run` now simply executes `npm start` command.
 
-* au test 
-* au test --watch // No cierra el entorno de prueba, y se recarga en cada actualización del código
+## Build for production
+
+Run `npm run build`, or the old way `au build --env prod`.
+
+## Unit tests
+
+Run `au test` (or `au jest`).
+
+To run in watch mode, `au test --watch` or `au jest --watch`.

@@ -6,10 +6,19 @@ export class Problem {
      */
     configureRouter(config, router) {
         config.map([{
-                route: '', //tc or tchs
-                name: 'problems',
-                moduleId: 'modules/problems/general-problems/general-problems',
-                title: 'Problemas',
+                route: 'colegios',
+                name: 'problems-high-school',
+                moduleId: PLATFORM.moduleName('modules/problems/general-problems-high-school/general-problems-high-school'),
+                title: 'Problemas Training Center High School',
+                settings: {
+                    roles: ['admin', 'coach', 'student']
+                }
+            },
+            {
+                route: '',
+                name: 'problems-universities',
+                moduleId: PLATFORM.moduleName('modules/problems/general-problems-universities/general-problems-universities'),
+                title: 'Problemas Training Center',
                 settings: {
                     roles: ['admin', 'coach', 'student']
                 }
@@ -17,8 +26,17 @@ export class Problem {
             {
                 name: 'category',
                 route: 'categoria/:id',
-                moduleId: 'modules/problems/category-problems/category-problems',
+                moduleId: PLATFORM.moduleName('modules/problems/category-problems/category-problems'),
                 title: 'Problemas',
+                settings: {
+                    roles: ['admin', 'coach', 'student']
+                }
+            },
+            {
+                name: 'schools_category',
+                route: 'colegios/categoria/:id',
+                moduleId: PLATFORM.moduleName('modules/problems/category-problems-schools/category-problems-schools'),
+                title: 'Problemas - Colegios',
                 settings: {
                     roles: ['admin', 'coach', 'student']
                 }
@@ -26,7 +44,7 @@ export class Problem {
             {
                 name: 'problems-creator',
                 route: 'nuevo',
-                moduleId: 'modules/problems/problems-creator/problems-creator',
+                moduleId: PLATFORM.moduleName('modules/problems/problems-creator/problems-creator'),
                 title: 'Nuevo problema',
                 settings: {
                     roles: ['admin', 'coach']
@@ -35,7 +53,7 @@ export class Problem {
             {
                 name: 'edit-problem',
                 route: ':id/editar',
-                moduleId: 'modules/problems/problems-creator/problems-editor',
+                moduleId: PLATFORM.moduleName('modules/problems/problems-creator/problems-editor'),
                 title: 'Editar problema',
                 settings: {
                     roles: ['admin', 'coach']
@@ -44,12 +62,21 @@ export class Problem {
             {
                 name: 'view-problem',
                 route: [':id/detalle', ':id/detalle/:lang'],
-                moduleId: 'modules/problems/view-problem/view-problem',
+                moduleId: PLATFORM.moduleName('modules/problems/view-problem/view-problem'),
                 title: 'Problema',
                 settings: {
                     roles: ['admin', 'coach', 'student']
                 }
-            }
+            },
+            {
+                name: 'schools-view-problem',
+                route: ['colegios/:id/detalle', 'colegios/:id/detalle/:lang'],
+                moduleId: PLATFORM.moduleName('modules/problems/schools-view-problem/schools-view-problem'),
+                title: 'Problema - Colegios',
+                settings: {
+                    roles: ['admin', 'coach', 'student']
+                }
+            },
         ])
         this.router = router
     }

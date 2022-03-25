@@ -21,9 +21,8 @@ export class Principal {
      */
 
     constructor(routerService) {
-
-        this.routerService = routerService
-
+        this.routerService = routerService;
     }
+    
 
 }

@@ -11,8 +11,7 @@ const auth = require('../middlewares/auth')
  * Handler for '/categories' routes
  */
 
-//categories.get('/', auth.isAuth, categoriesCtrl.index )
-categories.get('/',categoriesCtrl.index)
+categories.get('/', auth.isAuth, categoriesCtrl.index )
 categories.get('/:id/problems', auth.isAuth, problemsCtrl.list )
 categories.get('/:id/materials', auth.isAuth, materialsCtrl.list )
 categories.post('/', auth.isAuth, categoriesCtrl.create )

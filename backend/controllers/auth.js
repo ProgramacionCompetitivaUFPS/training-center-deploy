@@ -16,7 +16,8 @@ const moment = require('moment')
  * @param {any} res
  */
 function signIn(req, res) {
-    console.log(req)
+    console.log('***********************************init user')
+
     if (!req.body.email || !req.body.password) {
         res.status(400).send({ error: 'Datos incompletos' })
     }
@@ -32,6 +33,7 @@ function signIn(req, res) {
             res.status(401).send({ error: 'Contraseña incorrecta' })
 
     }).catch(function(err) {
+        console.log('***********************************catch user\n' + err)
         res.status(401).send({ error: 'Email incorrecto' })
     })
 }

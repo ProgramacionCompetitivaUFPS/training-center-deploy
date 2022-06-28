@@ -144,10 +144,16 @@ module.exports = function(sequelize, DataTypes) {
      * @returns
      */
     Users.prototype.authenticate = function(value) {
-        if (bcrypt.compareSync(value, this.password))
+        console.log('****************bcrypt ' + value)
+        if (bcrypt.compareSync(value, this.password)){
             return this;
-        else
+        console.log('****************bcrypt ' + this)
+        }
+        else{
+        console.log('****************bcrypt ' + false)
             return false;
+        }
+
     };
 
     return Users;

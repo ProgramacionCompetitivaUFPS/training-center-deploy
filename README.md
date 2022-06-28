@@ -37,6 +37,8 @@ Crear un archivo .env y configurar las siguientes variables:
 - SMTP_SERVICE: Nombre del servicio integrado por nodemailer para enviar mails.
 - SMTP_PORT: Puerto de la conexión de email.
 
+Importante: el .env debe estar dentro del directorio del backend
+
 ## Ejecutar los contenedores
 
 Para levantar todos los contenedores se debe ejecutar el siguiente comando:

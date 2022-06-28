@@ -24,8 +24,8 @@ services:
       - "SMTP_SERVICE=${SMTP_SERVICE}"
       - "SMTP_PORT=${SMTP_PORT}"
     volumes:
-       - "${FILES}:/usr/src/app/files"
-       - "/var/run/docker.sock:/var/run/docker.sock"
+      - "${FILES}:/usr/src/app/files"
+      - "/var/run/docker.sock:/var/run/docker.sock"
 #      - type: bind
 #       - source: "${FILES}"
 #        target: "/usr/src/app/files"
@@ -38,14 +38,14 @@ services:
       - cpp
       - java
       - python
-#    network_mode: "host"
+    network_mode: "host"
     
   cpp:
     build: "grading/cpp"
     image: "cpp_image"
     container_name: "cppSandbox"
     volumes:
-       - "${FILES}:/files"
+	
 #      - type: bind
 #       - source: "${FILES}"
 #        target: "/files"
@@ -57,10 +57,9 @@ services:
     restart: "always"
     container_name: "javaSandbox"
     volumes:
-       - "${FILES}:/files"
 #      - type: bind
-#       - source: "${FILES}"
-#        target: "/files"
+       - source: "${FILES}"
+        target: "/files"
     tty: true
 
   python:
@@ -69,9 +68,8 @@ services:
     restart: "always"
     container_name: "pythonSandbox"
     volumes:
-       - "${FILES}:/files"
 #      - type: bind
-#       - source: "${FILES}"
-#        target: "/files"
+       - source: "${FILES}"
+        target: "/files"
     tty: true
 

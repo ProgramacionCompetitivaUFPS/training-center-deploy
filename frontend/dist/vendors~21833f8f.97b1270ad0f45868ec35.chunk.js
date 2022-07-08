@@ -1,4 +1,4 @@
-(window["webpackJsonp"] = window["webpackJsonp"] || []).push([["app~21833f8f"],{
+(window["webpackJsonp"] = window["webpackJsonp"] || []).push([["vendors~21833f8f"],{
 
 /***/ "OFPu":
 /*!****************************!*\
@@ -8,7 +8,7 @@
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony default export */ __webpack_exports__[\"default\"] = ({\n  debug: true,\n  testing: true,\n  API_BACKEND_URL_DEVELOPMENT: \"http://localhost:3000/api/\" //API_BACKEND_URL_DEVELOPMENT:\"https://trainingcenter.cloud.ufps.edu.co/api/\"\n\n});//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiT0ZQdS5qcyIsInNvdXJjZXMiOlsid2VicGFjazovLy8uL3NyYy9lbnZpcm9ubWVudC5qcz8zODUzIl0sInNvdXJjZXNDb250ZW50IjpbImV4cG9ydCBkZWZhdWx0IHtcclxuICBkZWJ1ZzogdHJ1ZSxcclxuICB0ZXN0aW5nOiB0cnVlLFxyXG4gIEFQSV9CQUNLRU5EX1VSTF9ERVZFTE9QTUVOVDpcImh0dHA6Ly9sb2NhbGhvc3Q6MzAwMC9hcGkvXCJcclxuICAvL0FQSV9CQUNLRU5EX1VSTF9ERVZFTE9QTUVOVDpcImh0dHBzOi8vdHJhaW5pbmdjZW50ZXIuY2xvdWQudWZwcy5lZHUuY28vYXBpL1wiXHJcbn07XHJcbiJdLCJtYXBwaW5ncyI6IkFBQUE7QUFBQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBSkEiLCJzb3VyY2VSb290IjoiIn0=\n//# sourceURL=webpack-internal:///OFPu\n");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony default export */ __webpack_exports__[\"default\"] = ({\n  debug: true,\n  testing: true,\n  //API_BACKEND_URL_DEVELOPMENT:\"http://localhost:3000/api/\"\n  API_BACKEND_URL_DEVELOPMENT: \"https://trainingcenter.cloud.ufps.edu.co/api/\"\n});//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiT0ZQdS5qcyIsInNvdXJjZXMiOlsid2VicGFjazovLy8uL3NyYy9lbnZpcm9ubWVudC5qcz8zODUzIl0sInNvdXJjZXNDb250ZW50IjpbImV4cG9ydCBkZWZhdWx0IHtcclxuICBkZWJ1ZzogdHJ1ZSxcclxuICB0ZXN0aW5nOiB0cnVlLFxyXG4gIC8vQVBJX0JBQ0tFTkRfVVJMX0RFVkVMT1BNRU5UOlwiaHR0cDovL2xvY2FsaG9zdDozMDAwL2FwaS9cIlxyXG4gIEFQSV9CQUNLRU5EX1VSTF9ERVZFTE9QTUVOVDpcImh0dHBzOi8vdHJhaW5pbmdjZW50ZXIuY2xvdWQudWZwcy5lZHUuY28vYXBpL1wiXHJcbn07XHJcbiJdLCJtYXBwaW5ncyI6IkFBQUE7QUFBQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBSkEiLCJzb3VyY2VSb290IjoiIn0=\n//# sourceURL=webpack-internal:///OFPu\n");
 
 /***/ }),
 

@@ -32,12 +32,15 @@ function create(req, res) {
     req.body.output = req.files['output'][0].path
     req.body.user_id = req.user.sub
     req.body.userId = req.user.sub
-    
+
+    console.log("user id ", req.user.sub)
+
     Problem.create(req.body)
         .then(problem => {
             return res.sendStatus(201)
         })
         .catch(error => {
+            console.log(error)
             error = _.omit(error, ['parent', 'original', 'sql'])
             return res.status(400).send(error)
         })

@@ -30,7 +30,8 @@ function create(req, res) {
     req.body.category_id = req.body.category
     req.body.input = req.files['input'][0].path
     req.body.output = req.files['output'][0].path
-    req.body.user_id = req.user.sub
+    //req.body.user_id = req.user.sub
+    req.body.userId = req.user.sub
 
     Problem.create(req.body)
         .then(problem => {

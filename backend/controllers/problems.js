@@ -31,16 +31,12 @@ function create(req, res) {
     req.body.input = req.files['input'][0].path
     req.body.output = req.files['output'][0].path
     req.body.user_id = req.user.sub
-    req.body.userId = req.user.sub
-
-    console.log("user id ", req.user.sub)
 
     Problem.create(req.body)
         .then(problem => {
             return res.sendStatus(201)
         })
         .catch(error => {
-            console.log(error)
             error = _.omit(error, ['parent', 'original', 'sql'])
             return res.status(400).send(error)
         })
@@ -261,7 +257,7 @@ function list(req, res) {
             Problem.findAndCountAll({
                 where: condition,
                 distinct: 'id',
-                attributes: ['id', 'title_es', 'title_en', 'level', 'user_id'],
+                attributes: ['id', 'title_es', 'title_en', 'level'],
                 include: [{
                     model: Submission,
                     as: 'submissions',
@@ -292,7 +288,7 @@ function list(req, res) {
         Problem.findAndCountAll({
             where: condition,
             distinct: 'id',
-            attributes: ['id', 'title_es', 'title_en', 'level', 'user_id'],
+            attributes: ['id', 'title_es', 'title_en', 'level'],
             limit: limit,
             include: [{
                 model: Submission,

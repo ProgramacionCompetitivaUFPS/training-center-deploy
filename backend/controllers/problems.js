@@ -348,6 +348,7 @@ function submit(req, res) {
 
     Submission.create(req.body)
         .then(submission => {
+        
             Grader.judge(submission.id, isContest, fileNameExecution, filePathExecution)
             return res.status(200).send(submission)
         })
@@ -357,6 +358,12 @@ function submit(req, res) {
         })
 }
 
+/**
+ * obtener tipo de categoría del problema (colegio, univercisad)
+ * @param {*} req 
+ * @param {*} res 
+ * @returns 
+ */
 function validateCategory(req, res){
 
     Category.findOne({

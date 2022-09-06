@@ -57,9 +57,7 @@ function judge( submission_id, contest, fileNameExecution, filePathExecution) {
                 file_xml_path
             )
 
-
             execution.checkStatus( ( status ) => {
-                
                 if( status ){
                     console.log( "************** CONTENEDOR EJECUTANDOSE **********")
                     updateStatus( submission_id, { status: 'running'} )

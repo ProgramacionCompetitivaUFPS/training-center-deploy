@@ -31,6 +31,7 @@ class Sandbox {
   checkStatus( cb ){
     let container = this.config.containers[this.languageId]
     let ins = 'docker exec ' + container + ' ls '
+
     exec( ins, (error, stdout, stderr) => {
       if (error){
         cb( false )

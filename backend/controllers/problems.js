@@ -159,6 +159,9 @@ function list(req, res) {
     let order = []
     let offset = (req.query.page) ? limit * (parseInt(req.query.page) - 1) : 0
     let by = (req.query.by) ? req.query.by : 'ASC'
+    let typeCategory = (req.query.typeCategory)
+
+    console.log("typeCategory "+typeCategory)
 
     let condition = {}
     let meta = {}
@@ -178,9 +181,9 @@ function list(req, res) {
                 }
             }
         }
-    } else if (!req.query.search)
+    } else if (!req.query.search){
         return res.status(400).send({ error: 'No se ha proporcionado un termino para buscar' })
-    else {
+    }else{
 
         req.query.search = '%' + req.query.search + '%'
         if (req.query.filter) {
@@ -242,6 +245,16 @@ function list(req, res) {
         }
     }
 
+    if(typeCategory){
+        console.log("entrooooooo buscar por tipo categoria")
+        condition.category_id = {
+            [Op.in]: Sequelize.literal(
+              `(SELECT id FROM categories 
+               WHERE type = ${typeCategory})`
+            ),
+          };
+    }
+
     if (req.query.sort) {
         if (req.query.sort == 'name')
             if (req.query.filter && req.query.filter == 'es')
@@ -270,6 +283,11 @@ function list(req, res) {
                         verdict: 'Accepted'
                     },
                     required: false
+                },
+                {   
+                    model: Category,
+                    attributes: ['id', 'name', 'type'],
+                    required: true
                 }],
                 limit: limit,
                 order: order,
@@ -291,7 +309,7 @@ function list(req, res) {
         Problem.findAndCountAll({
             where: condition,
             distinct: 'id',
-            attributes: ['id', 'title_es', 'title_en', 'level'],
+            attributes: ['id', 'title_es', 'title_en', 'level', 'category_id'],
             limit: limit,
             include: [{
                 model: Submission,
@@ -302,6 +320,11 @@ function list(req, res) {
                     verdict: 'Accepted'
                 },
                 required: false
+            },
+            {
+                model: Category,
+                attributes: ['id', 'name', 'type'],
+                required: true
             }],
             order: order,
             offset: offset,
@@ -314,6 +337,7 @@ function list(req, res) {
             }
             res.status(200).send({ meta: meta, data: response.rows })
         }).catch((err) => {
+            console.log(err)
             res.sendStatus(500)
         })
     }

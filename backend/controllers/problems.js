@@ -8,6 +8,9 @@ const Grader = require('../controllers/grader')
 const _ = require('lodash')
 const files = require('../services/files')
 
+const Sequelize = require('sequelize')
+const Op = Sequelize.Op
+
 /**
  * Problems controller 
  */
@@ -19,21 +22,23 @@ function create(req, res) {
 
     req.body = req.body.data
 
-    if ( (!req.body.title_es && !req.body.title_en) || (!req.body.description_en && !req.body.description_es)
-        || !req.body.category || !req.body.level || !req.body.example_input || !req.body.example_output || !req.body.time_limit) {
+    if ((!req.body.title_es && !req.body.title_en) || (!req.body.description_en && !req.body.description_es) ||
+        !req.body.category || !req.body.level || !req.body.example_input || !req.body.example_output || !req.body.time_limit) {
         return res.status(400).send({ error: 'Datos incompletos' })
     }
 
     req.body.category_id = req.body.category
     req.body.input = req.files['input'][0].path
     req.body.output = req.files['output'][0].path
+    req.body.userId = req.user.sub
     req.body.user_id = req.user.sub
 
-    Problem.create( req.body )
+    Problem.create(req.body)
         .then(problem => {
             return res.sendStatus(201)
         })
         .catch(error => {
+            console.error(error)
             error = _.omit(error, ['parent', 'original', 'sql'])
             return res.status(400).send(error)
         })
@@ -64,7 +69,7 @@ function update(req, res) {
 }
 
 function findFiles(req, res, condition) {
-    Problem.findById(req.params.id).then(problem => {
+    Problem.findByPk(req.params.id).then(problem => {
         if (req.files['input']) req.body.oldInput = problem.input
         if (req.files['output']) req.body.oldOutput = problem.output
 
@@ -76,8 +81,7 @@ function findFiles(req, res, condition) {
 
 function makeUpdate(req, res, condition) {
     Problem.update(
-        req.body,
-        {
+        req.body, {
             where: condition
         }
     ).then((affectedRows) => {
@@ -108,38 +112,40 @@ function remove(req, res) {
     }
 
     Problem.destroy({
-        where: condition
-    })
-        .then(function (deletedRecords) {
+            where: condition
+        })
+        .then(function(deletedRecords) {
             if (deletedRecords) return res.status(200).json(deletedRecords);
             return res.status(401).send({ error: 'No se encuentra autorizado' })
         })
-        .catch(function (error) {
+        .catch(function(error) {
             return res.status(500).json(error);
         });
 }
 
 function get(req, res) {
     Problem.findOne({
-        where: {
-            id: req.params.id
-        },
-        include: [ 
-            { model: User, attributes: ['name', 'id', 'username', 'email'] },
-            { 
-                model: Submission, 
-                as: 'submissions',
-                attributes: ['user_id'],
-                where: {
-                    user_id: req.user.sub,
-                    verdict: 'Accepted'
+            where: {
+                id: req.params.id
+            },
+            include: [
+                { model: User, attributes: ['name', 'id', 'username', 'email'] },
+                {
+                    model: Submission,
+                    as: 'submissions',
+                    attributes: ['user_id'],
+                    where: {
+                        user_id: req.user.sub,
+                        verdict: 'Accepted'
+                    },
+                    required: false
                 },
-                required: false
-            } 
-        ],
-        attributes: ['id', 'title_es', 'title_en', 'level', 'description_en', 'description_es',
-            'example_input', 'example_output', 'category_id', 'user_id', 'time_limit']
-    })
+                { model: Category, attributes: ['name', 'id', 'type'] },
+            ],
+            attributes: ['id', 'title_es', 'title_en', 'level', 'description_en', 'description_es',
+                'example_input', 'example_output', 'category_id', 'user_id', 'time_limit'
+            ]
+        })
         .then((problem) => {
             return res.status(200).send({ problem })
         })
@@ -151,58 +157,99 @@ function get(req, res) {
 function list(req, res) {
     let limit = (req.query.limit) ? parseInt(req.query.limit) : 10
     let order = []
-    let offset = (req.query.page) ? limit * ( parseInt(req.query.page) - 1 ) : 0
+    let offset = (req.query.page) ? limit * (parseInt(req.query.page) - 1) : 0
     let by = (req.query.by) ? req.query.by : 'ASC'
+    let typeCategory = (req.query.typeCategory)
 
     let condition = {}
     let meta = {}
 
     // Barra de búsqueda o búsqueda de problemas por categoria 
-    if( req.params.id ) {
+    if (req.params.id) {
         condition.category_id = req.params.id
         if (req.query.filter) {
             if (req.query.filter == 'en') {
                 condition.title_en = {
-                    $ne: null
+                    [Op.ne]: null
                 }
             } else {
+
                 condition.title_es = {
-                    $ne: null
+                    [Op.ne]: null
                 }
             }
         }
-    } else if( !req.query.search )
+    } else if (!req.query.search){
         return res.status(400).send({ error: 'No se ha proporcionado un termino para buscar' })
-    else {
+    }else{
+
         req.query.search = '%' + req.query.search + '%'
         if (req.query.filter) {
             if (req.query.filter == 'en') {
                 condition.title_en = {
-                    $ne: null
+                    [Op.ne]: null
                 }
 
-                condition.$or = [
-                    { title_en: { $like: req.query.search } },
-                    { description_en: { $like: req.query.search } }
+                condition[Op.or] = [{
+                        title_en: {
+                            [Op.like]: req.query.search
+                        }
+                    },
+                    {
+                        description_en: {
+                            [Op.like]: req.query.search
+                        }
+                    }
                 ]
             } else {
                 condition.title_es = {
-                    $ne: null
+                    [Op.ne]: null
                 }
 
-                condition.$or = [
-                    { title_es: { $like: req.query.search } },
-                    { description_es: { $like: req.query.search } },
+                condition[Op.or] = [{
+                        title_es: {
+                            [Op.like]: req.query.search
+                        }
+                    },
+                    {
+                        description_es: {
+                            [Op.like]: req.query.search
+                        }
+                    },
                 ]
             }
-        }else{
-            condition.$or = [
-                { title_en: { $like: req.query.search } },
-                { title_es: { $like: req.query.search } },
-                { description_en: { $like: req.query.search } },
-                { description_es: { $like: req.query.search } },
+        } else {
+            condition[Op.or] = [{
+                    title_en: {
+                        [Op.like]: req.query.search
+                    }
+                },
+                {
+                    title_es: {
+                        [Op.like]: req.query.search
+                    }
+                },
+                {
+                    description_en: {
+                        [Op.like]: req.query.search
+                    }
+                },
+                {
+                    description_es: {
+                        [Op.like]: req.query.search
+                    }
+                },
             ]
         }
+    }
+
+    if(typeCategory){
+        condition.category_id = {
+            [Op.in]: Sequelize.literal(
+              `(SELECT id FROM categories 
+               WHERE type = ${typeCategory})`
+            ),
+          };
     }
 
     if (req.query.sort) {
@@ -214,52 +261,18 @@ function list(req, res) {
             order[0] = ['level', by]
     } else order[0] = ['id', by]
 
-    if( req.params.id ){
-        Category.findById(req.params.id).then( category => {
-            if( !category ) return res.sendStatus(404)
-    
+    if (req.params.id) {
+        Category.findByPk(req.params.id).then(category => {
+            if (!category) return res.sendStatus(404)
+
             meta.categoryName = category.name
-    
+
             Problem.findAndCountAll({
                 where: condition,
                 distinct: 'id',
-                attributes: ['id', 'title_es', 'title_en', 'level', 'user_id'],
-                include: [ 
-                    { 
-                        model: Submission, 
-                        as: 'submissions',
-                        attributes: ['user_id'],
-                        where: {
-                            user_id: req.user.sub,
-                            verdict: 'Accepted'
-                        },
-                        required: false
-                    }
-                ],
-                limit: limit,
-                order: order,
-                offset: offset,
-            }).then((response) => {
-                meta.totalPages = Math.ceil( response.count / limit )
-                meta.totalItems = response.count
-    
-                if ( offset >= response.count ) {
-                    return res.status(200).send( { meta } )
-                }
-                res.status(200).send({ meta: meta, data: response.rows })
-            })
-        }).catch((err) => {
-            res.sendStatus(500)
-        })
-    } else {
-        Problem.findAndCountAll({
-            where: condition,
-            distinct: 'id',
-            attributes: ['id', 'title_es', 'title_en', 'level', 'user_id'],
-            limit: limit,
-            include: [ 
-                { 
-                    model: Submission, 
+                attributes: ['id', 'title_es', 'title_en', 'level'],
+                include: [{
+                    model: Submission,
                     as: 'submissions',
                     attributes: ['user_id'],
                     where: {
@@ -267,19 +280,61 @@ function list(req, res) {
                         verdict: 'Accepted'
                     },
                     required: false
+                },
+                {   
+                    model: Category,
+                    attributes: ['id', 'name', 'type'],
+                    required: true
+                }],
+                limit: limit,
+                order: order,
+                offset: offset,
+            }).then((response) => {
+                meta.totalPages = Math.ceil(response.count / limit)
+                meta.totalItems = response.count
+
+                if (offset >= response.count) {
+                    return res.status(200).send({ meta })
                 }
-            ],
+                res.status(200).send({ meta: meta, data: response.rows })
+            })
+        }).catch((err) => {
+            res.sendStatus(500)
+        })
+    } else {
+
+        Problem.findAndCountAll({
+            where: condition,
+            distinct: 'id',
+            attributes: ['id', 'title_es', 'title_en', 'level', 'category_id'],
+            limit: limit,
+            include: [{
+                model: Submission,
+                as: 'submissions',
+                attributes: ['user_id'],
+                where: {
+                    user_id: req.user.sub,
+                    verdict: 'Accepted'
+                },
+                required: false
+            },
+            {
+                model: Category,
+                attributes: ['id', 'name', 'type'],
+                required: true
+            }],
             order: order,
             offset: offset,
         }).then((response) => {
-            meta.totalPages = Math.ceil( response.count / limit )
+            meta.totalPages = Math.ceil(response.count / limit)
             meta.totalItems = response.count
 
-            if ( offset >= response.count ) {
-                return res.status(200).send( { meta } )
+            if (offset >= response.count) {
+                return res.status(200).send({ meta })
             }
             res.status(200).send({ meta: meta, data: response.rows })
         }).catch((err) => {
+            console.error(err)
             res.sendStatus(500)
         })
     }
@@ -291,21 +346,30 @@ function submit(req, res) {
 
     req.body = req.body.data
 
-    if( !req.files['code'] || !req.body.language )
+    if (!req.files['code'] || !req.body.language)
         return res.status(400).send({ error: 'Datos incompletos' })
-    
+
     req.body.user_id = req.user.sub
     req.body.problem_id = req.params.id
-    req.body.file_name = req.files['code'][0].filename
-    req.body.file_path = req.files['code'][0].path
     req.body.status = 'in queue'
 
-    let isContest = false
-    if( req.body.contest_problem_id ) isContest = true
+    //archivo que se evalua
+    const fileNameExecution =  req.files['code'][0].filename
+    const filePathExecution = req.files['code'][0].path
+    req.body.file_name = fileNameExecution
+    req.body.file_path = filePathExecution
 
-    Submission.create( req.body )
+    if(req.files['svgBlocklyCode']){
+        req.body.blockly_file_name = req.files['svgBlocklyCode'][0].filename
+    }
+    
+    let isContest = false
+    if (req.body.contest_problem_id) isContest = true
+
+    Submission.create(req.body)
         .then(submission => {
-            Grader.judge( submission.id, isContest )
+        
+            Grader.judge(submission.id, isContest, fileNameExecution, filePathExecution)
             return res.status(200).send(submission)
         })
         .catch(error => {
@@ -314,11 +378,45 @@ function submit(req, res) {
         })
 }
 
+/**
+ * obtener tipo de categoría del problema (colegio, univercisad)
+ * @param {*} req 
+ * @param {*} res 
+ * @returns 
+ */
+function validateCategory(req, res){
+
+    Category.findOne({
+        attributes: [
+            'type'
+        ],
+        include: [
+            {
+                model: Problem,
+                as: 'problems',
+                attributes: ['id', 'category_id'],
+                where: {
+                    id: req.params.id,
+                }
+            }
+        ]
+    })
+        .then((category) => {
+            return res.status(200).send({ type: category.type })
+        })
+        .catch((err) => {
+            return res.status(500).send({ error: `${err}` })
+        })
+
+    return true
+}
+
 module.exports = {
     create,
     update,
     remove,
     list,
     get,
-    submit
+    submit,
+    validateCategory
 }

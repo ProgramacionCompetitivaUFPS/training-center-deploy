@@ -1,0 +1,75 @@
+version: '3.2'
+services:
+  frontend:
+    build: "frontend"
+    image: "frontend"
+    container_name: "training-center-frontend"
+    ports:
+      - "${FRONTEND_PORT}:8080"
+    depends_on:
+      - backend
+  backend:
+    build: "backend"
+    image: "backend"
+    restart: "always"
+    container_name: "training-center-backend"
+    environment:
+      - "NODE_ENV=${NODE_ENV}"
+      - "DATABASE_URL=${DATABASE_URL}"
+      - "SECRET_TOKEN=${SECRET_TOKEN}"
+      - "SMTP_HOST=${SMTP_HOST}"
+      - "SMTP_USER=${SMTP_USER}"
+      - "SMTP_PASSWORD=${SMTP_PASSWORD}"
+      - "FROM_ACCOUNT=${FROM_ACCOUNT}"
+      - "SMTP_SERVICE=${SMTP_SERVICE}"
+      - "SMTP_PORT=${SMTP_PORT}"
+    volumes:
+      - "${FILES}:/usr/src/app/files"
+      - "/var/run/docker.sock:/var/run/docker.sock"
+#      - type: bind
+#       - source: "${FILES}"
+#        target: "/usr/src/app/files"
+#      - type: bind
+#       - source: "/var/run/docker.sock"
+#        target: "/var/run/docker.sock"
+    ports:
+      - "${BACKEND_PORT}:8081"
+    depends_on:
+      - cpp
+      - java
+      - python
+    network_mode: "host"
+    
+  cpp:
+    build: "grading/cpp"
+    image: "cpp_image"
+    container_name: "cppSandbox"
+    volumes:
+	
+#      - type: bind
+#       - source: "${FILES}"
+#        target: "/files"
+    tty: true
+
+  java:
+    build: "grading/java"
+    image: "java_image"
+    restart: "always"
+    container_name: "javaSandbox"
+    volumes:
+#      - type: bind
+       - source: "${FILES}"
+        target: "/files"
+    tty: true
+
+  python:
+    build: "grading/python"
+    image: "python_image"
+    restart: "always"
+    container_name: "pythonSandbox"
+    volumes:
+#      - type: bind
+       - source: "${FILES}"
+        target: "/files"
+    tty: true
+

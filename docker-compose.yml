@@ -1,4 +1,4 @@
-version: '3'
+version: '3.2'
 services:
   frontend:
     build: "frontend"
@@ -8,7 +8,6 @@ services:
       - "${FRONTEND_PORT}:8080"
     depends_on:
       - backend
-
   backend:
     build: "backend"
     image: "backend"
@@ -25,21 +24,31 @@ services:
       - "SMTP_SERVICE=${SMTP_SERVICE}"
       - "SMTP_PORT=${SMTP_PORT}"
     volumes:
-      - "${FILES}:/usr/src/app/files"
-      - "/var/run/docker.sock:/var/run/docker.sock"
+       - "${FILES}:/usr/src/app/files"
+       - "/var/run/docker.sock:/var/run/docker.sock"
+#      - type: bind
+#       - source: "${FILES}"
+#        target: "/usr/src/app/files"
+#      - type: bind
+#       - source: "/var/run/docker.sock"
+#        target: "/var/run/docker.sock"
     ports:
       - "${BACKEND_PORT}:8081"
     depends_on:
       - cpp
       - java
       - python
+#    network_mode: "host"
     
   cpp:
     build: "grading/cpp"
     image: "cpp_image"
     container_name: "cppSandbox"
     volumes:
-      - "${FILES}:/files"
+       - "${FILES}:/files"
+#      - type: bind
+#       - source: "${FILES}"
+#        target: "/files"
     tty: true
 
   java:
@@ -48,7 +57,10 @@ services:
     restart: "always"
     container_name: "javaSandbox"
     volumes:
-      - "${FILES}:/files"
+       - "${FILES}:/files"
+#      - type: bind
+#       - source: "${FILES}"
+#        target: "/files"
     tty: true
 
   python:
@@ -57,6 +69,9 @@ services:
     restart: "always"
     container_name: "pythonSandbox"
     volumes:
-      - "${FILES}:/files"
+       - "${FILES}:/files"
+#      - type: bind
+#       - source: "${FILES}"
+#        target: "/files"
     tty: true
 

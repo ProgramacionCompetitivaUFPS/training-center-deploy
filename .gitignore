@@ -1,2 +1,5 @@
 .env
-.env.example
+/files/
+npm-debug.log
+.sql
+

@@ -24,13 +24,20 @@ function signIn(req, res) {
         where: {
             email: req.body.email
         }
-    }).then(function (user) {
-        if (user.authenticate(req.body.password))
-            res.status(200).send({ token: authService.createToken(user) })
-        else
+    }).then(function(user) {
+        if (user.authenticate(req.body.password)){
+            if(user.institution_id === null){
+                res.status(200).send({ token: authService.createToken(user),
+                    actualizado: -1});
+            } else { 
+                res.status(200).send({ token: authService.createToken(user),
+                    actualizado: user.institution_id});
+            }
+        } else
             res.status(401).send({ error: 'Contraseña incorrecta' })
 
-    }).catch(function (err) {
+    }).catch(function(err) {
+        console.error(err)
         res.status(401).send({ error: 'Email incorrecto' })
     })
 }
@@ -55,9 +62,11 @@ function recovery(req, res) {
         where: {
             email: req.query.email
         }
-    }).then(function (user) {
+    }).then(function(user) {
         let token = authService.getRecoveryToken(user);
-        let data = [['{{link}}', `/#/cambiar-password/${token}`]]
+        let data = [
+            ['{{link}}', `/#/cambiar-password/${token}`]
+        ]
 
         ViewRender.render('../common/templates/recovery.html', data, (err, view) => {
             if (err) return res.sendStatus(500)
@@ -68,12 +77,11 @@ function recovery(req, res) {
                 return res.sendStatus(200)
             }, (err) => {
                 if (err)
-                    //console.log(err)
                     return res.sendStatus(500)
             })
         })
 
-    }).catch(function (err) {
+    }).catch(function(err) {
         res.status(401).send({ error: `${err}` })
     })
 }

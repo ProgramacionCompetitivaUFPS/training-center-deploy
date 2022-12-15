@@ -4,11 +4,8 @@
 #-------------------------------------------------------------------------------#
 
 # Pull base image
+#FROM node:latest
 FROM node:carbon
-
-# Container Basic Info 
-MAINTAINER GERSON LAZARO
-MAINTAINER MELISSA DELGADO
 
 # Create app directory
 WORKDIR /usr/src/app
@@ -31,7 +28,9 @@ RUN apt-get update && \
 
 # Install app dependencies
 COPY package*.json ./
-RUN npm install --only=production
+#RUN npm install -g npm@latest
+RUN npm install
+#RUN npm install -g nodemon
 
 #Define environment variables
 ENV PORT 8081

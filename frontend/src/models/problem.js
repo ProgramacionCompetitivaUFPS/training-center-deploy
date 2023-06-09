@@ -13,20 +13,23 @@ export class Problem {
    * @param {number} level - Nivel del problema
    * @param {number} category - Identificador de la categoría
    * @param {string} categoryName - Nombre de la categoría
+   * @param {Number} categoryType - Tipo de categoría
    * @param {string} descriptionEN - Enunciado del problema en inglés
    * @param {string} descriptionES - Enunciado del problema en español
    * @param {string} exampleIput - Entradas de ejemplo
    * @param {string} exampleOutput - Salidas de ejemplo
    * @param {Number} auxiliarId - Si el problema está en una maratón o syllabus, tiene un id axuxiliar
    * @param {boolean} resolved - True si el problema ha sido previamente solucionado, false en caso contrario 
+   * @param {[]} submissions - Arreglo con los usuarios que han realizado envios sobre este problema 
    */
-  constructor (id = undefined, titleEN = undefined, titleES = undefined, level = undefined, category = undefined, categoryName = undefined, descriptionEN = undefined, descriptionES = undefined, exampleInput = undefined, exampleOutput = undefined, timeLimit = undefined, input = undefined, output = undefined, author = undefined, authorName = undefined, auxiliarId = undefined, resolved = false) {
+  constructor (id = undefined, titleEN = undefined, titleES = undefined, level = undefined, category = undefined, categoryName = undefined, categoryType = undefined, descriptionEN = undefined, descriptionES = undefined, exampleInput = undefined, exampleOutput = undefined, timeLimit = undefined, input = undefined, output = undefined, author = undefined, authorName = undefined, auxiliarId = undefined, resolved = false, submissions= undefined, approval_rate= undefined,submission_count=undefined) {
     this.id = id
     this.titleEN = titleEN
     this.titleES = titleES
     this.level = level
     this.category = category
     this.categoryName = categoryName
+    this.categoryType = categoryType
     this.descriptionEN = descriptionEN
     this.descriptionES = descriptionES
     this.exampleInput = exampleInput
@@ -38,6 +41,9 @@ export class Problem {
     this.authorName = authorName
     this.auxiliarId = auxiliarId
     this.resolved = resolved
+    this.submissions = submissions,
+    this.approval_rate = approval_rate,
+    this.submission_count=submission_count
   }
 
   /**

@@ -5,6 +5,15 @@
  * @exports MESSAGES - Objeto JSON con todos los mensajes
  */
 export let MESSAGES = {
+
+  createMessage : (text, type) => {
+    const message = {
+      "text": text,
+      "type": type
+    }
+    return message
+  },
+
   // LOGIN
   loginWrongData: {
     text: 'Sus datos no coinciden. Inténtalo de nuevo',
@@ -54,6 +63,14 @@ export let MESSAGES = {
   },
   usernameInvalid: {
     text: 'El nombre de usuario debe tener entre 6 y 30 caracteres',
+    type: 'error'
+  },
+  noInstitution: {
+    text: 'Debe seleccionar una institucion educativa',
+    type: 'error'
+  },
+  emailNoInstitu: {
+    text: 'El correo electrónico escrito no es institucional',
     type: 'error'
   },
   emailInvalid: {
@@ -139,6 +156,10 @@ export let MESSAGES = {
   },
   problemsEmpty: {
     text: 'Actualmente no hay problemas almacenados en la plataforma',
+    type: 'warning'
+  },
+  problemsSubmissionsEmpty: {
+    text: 'Actualmente no hay envios relacionados al problema en la plataforma',
     type: 'warning'
   },
   submittedSolution: {

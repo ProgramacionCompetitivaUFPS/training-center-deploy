@@ -36,7 +36,9 @@ export class CategoryProblems {
         this.totalPages = 1
         this.page = 1
         this.numberOfItems = [10, 20, 30, 50]
-        this.sortOptions = ['Id', 'Nombre', 'Dificultad']
+        this.dummyTotals = [0, 0, 4, 12,47]
+        this.dummyPercentage = [0, 0, 50, 75,23]
+        this.sortOptions = ['Id', 'Nombre', 'Aprobados','Envios']
         this.filterChange = false
         this.limit = 10
         this.sort = 'Id'
@@ -84,7 +86,8 @@ export class CategoryProblems {
         let stringSort, stringLang
         if (this.sort === 'Id') stringSort = null
         else if (this.sort === 'Nombre') stringSort = 'name'
-        else if (this.sort === 'Dificultad') stringSort = 'level'
+        else if (this.sort === 'Aprobados') stringSort = 'approval_rate'
+        else if (this.sort === 'Envios') stringSort = 'submissions'
         if (this.language === 'Español') stringLang = 'es'
         else if (this.language === 'Inglés') stringLang = 'en'
         else stringLang = null
@@ -105,6 +108,19 @@ export class CategoryProblems {
                 }
             })
     }
+    /**
+     * Redondea un numero a dos cifras
+     * @param {number} number - numero
+     */
+    roundToTwoDecimals(number) {
+        if (number ==null){return 0}
+        number = parseFloat(number);
+        if (Number.isInteger(number)) {
+            return number;
+        } else {
+            return number.toFixed(2);
+        }
+      }
 
     /**
      * Muestra un popup para confirmar la eliminación del problema indicado por id.

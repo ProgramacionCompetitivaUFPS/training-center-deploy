@@ -6,20 +6,20 @@ import { Alert, Auth, Problems } from 'services/services'
 import { Enums } from 'models/models'
 
 /**
- * GeneralProblemsUniversities (Module)
- * Módulo encargado de la vista principal de las categorías, maratones y problemas, a nivel universitario
+ * GeneralMaterialsHighSchool(Module)
+ * Módulo encargado de la vista principal de las categorías en las que se separan los materiales, a nivel de colegios
  * @export
- * @class GeneralProblemsUniversities
+ * @class GeneralMaterialsHighSchool
  */
 
 // dependencias a inyectar: Servicio de notificaciones (Alert),
 // Servicio de Autenticación (Auth) y Servicio de obtención y manejo de problemas (Problems)
 // servicio de Router (Router)
 @inject(Alert, Auth, Problems, Router)
-export class GeneralProblemsUniversities {
+export class GeneralMaterialsHighSchool {
 
     /**
-     * Crea una instancia de GeneralProblemsUniversities.
+     * Crea una instancia de GeneralMaterialsHighSchool.
      * @param {service} alertService - Servicio de notificaciones
      * @param {service} authService - Servicio de autenticación
      * @param {service} problemService - Servicio de obtención y manejo de problemas
@@ -28,7 +28,6 @@ export class GeneralProblemsUniversities {
     constructor(alertService, authService, problemsService, routerService) {
         this.alertService = alertService
         this.authService = authService
-        this.enums = Enums
         this.problemsService = problemsService
         this.routerService = routerService
         this.categories = []
@@ -37,7 +36,7 @@ export class GeneralProblemsUniversities {
         this.categoryEditName = ''
         this.categoryRemoveId = null
         this.categoryRemoveName = ''
-        this.typeCategory = this.enums.typeCategory.university
+        this.enums = Enums
     }
 
     /**
@@ -60,10 +59,10 @@ export class GeneralProblemsUniversities {
     }
 
     /**
-     * Crea una nueva categoría a nivel universitario en la plataforma
+     * Crea una nueva categoría en la plataforma
      */
     createCategory() {
-        this.problemsService.createCategory(this.newCategory, this.typeCategory)
+        this.problemsService.createCategory(this.newCategory, this.enums.typeCategory.school)
             .then(() => {
                 this.getCategories()
                 this.alertService.showMessage(MESSAGES.categoryCreated)
@@ -76,10 +75,10 @@ export class GeneralProblemsUniversities {
     }
 
     /**
-     * Lee la lista de categorías a nivel universitario, disponibles en la plataforma.
+     * Lee la lista de categorías a nivel de colegios disponibles en la plataforma.
      */
     getCategories() {
-        this.problemsService.getCategories(this.typeCategory)
+        this.problemsService.getCategories(this.enums.typeCategory.school)
             .then(data => {
                 this.categories = data.categories
                 if (this.categories.length === 0) {
@@ -159,5 +158,8 @@ export class GeneralProblemsUniversities {
                 }
                 window.$('#remove-category').modal('hide')
             })
+    }
+    tour(){
+        introJs().start();
     }
 }

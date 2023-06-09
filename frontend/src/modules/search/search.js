@@ -2,7 +2,7 @@ import { inject, observable } from 'aurelia-framework'
 import { Router } from 'aurelia-router'
 
 import { MESSAGES } from 'config/config'
-import { Problem } from 'models/models'
+import { Problem, Enums } from 'models/models'
 import { Alert, Problems } from 'services/services'
 
 @inject(Alert, Router, Problems)
@@ -27,6 +27,8 @@ export class Search {
     this.language = 'Cualquier idioma'
     this.pagination = []
     this.problems = []
+    this.enums = Enums
+    this.typeCategory = this.enums.typeCategory.university
   }
     /**
    * Método que toma los parametros enviados en el link y configura la página para adaptarse
@@ -38,6 +40,8 @@ export class Search {
   activate (params, routeConfig) {
     this.routeConfig = routeConfig
     this.query = params.query.replace(/\+/g, ' ')
+    this.typeCategory = this.enums.typeCategory.getId(this.query)
+    if(this.query ==='colegio' || this.query ==='universidad') this.query= ' ' 
     this.getQuery()
   }
 
@@ -61,18 +65,27 @@ export class Search {
 
   getQuery () {
     let stringLang
+    let tsUndefinedKeyword="es"
     if (this.language === 'Español') stringLang = 'es'
     else if (this.language === 'Inglés') stringLang = 'en'
-    else stringLang = undefined
-    this.problemService.searchProblems(this.query, this.page, this.limit, (this.sort === 'Nombre') ? 'name' : (this.sort === 'Dificultad') ? 'level' : undefined, (this.by === 'Ascendente' ? 'asc' : 'desc'), stringLang)
+    else stringLang = tsUndefinedKeyword
+    this.problemService.searchProblems(this.query, this.page, this.limit, (this.sort === 'Nombre') ? 'name' : (this.sort === 'Dificultad') ? 'level' : undefined, (this.by === 'Ascendente' ? 'asc' : 'desc'), stringLang, this.typeCategory)
     .then(data => {
       this.totalPages = data.meta.totalPages
       this.problems = []
       this.dataLoaded = true
       if (this.totalPages > 0) {
         for(let i = 0; i < data.data.length; i++) {
-          this.problems.push(new Problem(data.data[i].id, data.data[i].title_en, data.data[i].title_es, data.data[i].level))
-          if(data.data[i].submissions.length > 0) this.problems[i].resolved = true 
+          let modelProblem = new Problem(
+            data.data[i].id, 
+            data.data[i].title_en, 
+            data.data[i].title_es, 
+            data.data[i].level)
+            modelProblem.categoryType = data.data[i].category.type
+          this.problems.push(modelProblem)
+          if(data.data[i].submissions.length > 0){
+            this.problems[i].resolved = true 
+          }
         }
       }
     }).catch(error => {

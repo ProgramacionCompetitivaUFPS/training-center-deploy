@@ -13,7 +13,7 @@ import { Alert, Auth, Problems, Rankings } from 'services/services'
 
 // dependencias a inyectar: Servicio de notificaciones (Alert), 
 // servicio de autenticación y validación de usuarios (Auth)
-@inject(Alert, Auth, Problems, Rankings)
+@inject(Alert, Auth, Problems, Rankings )
 export class Submissions {
   // Elementos observables. 
   @observable page
@@ -25,7 +25,7 @@ export class Submissions {
    * @param {service} authService - Servicio de autenticación y validación
    * @param {material} materialService - Servicio de material
    */
-  constructor (alertService, authService, problemService, rankingService) {
+  constructor (alertService, authService, problemService, rankingService ) {
     this.alertService = alertService
     this.problemService = problemService
     this.authService = authService
@@ -54,6 +54,18 @@ export class Submissions {
     this.enums = Enums
     this.getSubmissions()
   }
+
+  /**
+   * 
+   * @param {any} params  
+   * @param {any} routeConfig 
+   */
+  activate (params, routeConfig) {
+    this.routeConfig = routeConfig
+    this.id = (params.id) ? parseInt(params.id) : 0
+    this.getSubmissions()
+  }
+  
 
   setVeredict(veredict) {
     this.veredict = veredict
@@ -85,7 +97,7 @@ export class Submissions {
     else sortValue = 'date'
     let veredictValue = this.veredict.value
     if(veredictValue === 'ALL') veredictValue = null
-    this.rankingService.getSubmissions(this.authService.getUserId(), this.limit, this.page, (this.by === 'Ascendente' ? 'ASC' : 'DESC'), sortValue, veredictValue)
+    this.rankingService.getSubmissions(this.id, this.limit, this.page, (this.by === 'Ascendente' ? 'ASC' : 'DESC'), sortValue, veredictValue)
       .then(data => {
         this.totalPages = data.meta.totalPages
         this.submissions = []
@@ -136,6 +148,10 @@ export class Submissions {
     return parseFloat(value).toFixed(3)  
   }
 
+  /**
+   * Ver código del envío de solucion
+   * @param {*} submission 
+   */
   viewCode (submission) {
     this.downloadActive = false
     this.submissionLoaded = submission
@@ -148,8 +164,8 @@ export class Submissions {
         let reader  = new FileReader()
         reader.onload = () => {
           if(submission.blockly_file_name !== undefined && submission.blockly_file_name !== null){
-            this.downloadMesagge = 'Descargar código (Python)' 
-            this.isABlocklyCode = true
+            this.downloadMesagge = 'Descargar código (Python)'
+            this.isABlocklyCode = true 
             this.viewSvgSubmission(submission)
           }else{
             this.downloadMesagge = 'Descargar código'
@@ -171,6 +187,10 @@ export class Submissions {
       }) 
   }
 
+  /**
+   * Ver imagen svg de código de blockly
+   * @param {*} submission 
+   */
   viewSvgSubmission(submission){
     this.problemService.getSvgSubmission(this.submissionLoaded.blockly_file_name)
       .then(data => {
@@ -187,17 +207,18 @@ export class Submissions {
       }) 
   }
 
+  /**
+   * Descargar código fuente del envío
+   */
   downloadCode () {
     let filename
-
     if(this.submissionLoaded.language === 'Java') filename = 'Main.java'
     else if(this.submissionLoaded.language === 'C++') filename = 'main.cpp'
     else filename = 'main.py'
 
     if(window.navigator.msSaveOrOpenBlob) {
       window.navigator.msSaveBlob(this.codeDownload, filename)
-    }
-    else{
+    } else {
         let elem = window.document.createElement('a')
         elem.href = window.URL.createObjectURL(this.codeDownload)
         elem.download = filename  

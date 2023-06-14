@@ -5,6 +5,7 @@ const Problem = require('../models').problems
 const Submission = require('../models').submissions
 const Category = require('../models').categories
 const User = require('../models').users
+const path = require('path')
 const Grader = require('../controllers/grader')
 const _ = require('lodash')
 const files = require('../services/files')
@@ -155,6 +156,10 @@ function get(req, res) {
         })
 }
 
+function getDataFile(req, res) {
+    return res.sendFile(path.join(path.dirname(__dirname), 'files', req.params.folder, req.params.filename))
+}
+
 function getSubmissions(req, res) {
     let limit = (req.query.limit) ? parseInt(req.query.limit) : 10
     let order = []
@@ -198,32 +203,34 @@ function getSubmissions(req, res) {
     if (req.params.id) {
         Problem.findByPk(req.params.id).then(problem => {
             if (!problem) return res.sendStatus(404)
-            if (language ==='es'){
-                meta.title=problem.title_es
+
+            if (language ==='en'){
+                meta.title=problem.dataValues.title_en
             }
             else {
-                meta.title=problem.title_en
+                meta.title=problem.dataValues.title_es
             }
+            meta.title=problem.dataValues.title_es
+
             sequelize.query(
                 'SELECT count(s.id) AS `count` from submissions s' +
                     ' WHERE s.problem_id= :id',{replacements:{id:req.params.id}, type: Sequelize.QueryTypes.SELECT }
             ).then(response => {
                 meta.totalPages = Math.ceil(response[0].count / limit)
                 meta.totalItems = response[0].count
-
         
                 if (offset >= response[0].count)
                     return res.status(200).send({ meta })
                 
 
                 sequelize.query(
-                    `select s.id, u.name , u.username, s.language,s.execution_time , s.verdict, s.created_at
+                    `select s.id, u.name , u.username, s.language,s.execution_time , s.verdict, s.created_at, s.file_name
                     from submissions s 
                     inner join problems p on p.id = s.problem_id
                     left join users u on u.id = s.user_id
                     where p.id = :id   
                     ORDER BY `+order_sql+` `+by+`
-                    LIMIT `+ offset + ', ' + limit, { replacements: {id:req.params.id, limit: limit,offset: offset, id:req.params.id}, 
+                    LIMIT `+ offset + ', ' + limit, { replacements: {id:req.params.id, limit: limit,offset: offset}, 
                     type: Sequelize.QueryTypes.SELECT,
                     }
                 ).then(response => {
@@ -389,6 +396,8 @@ function list(req, res) {
                         (SUM(CASE WHEN submissions.verdict = 'Accepted' THEN 1 ELSE 0 END) / COUNT(submissions.id)) * 100 AS approval_rate
                     FROM
                         (SELECT problems.id,
+                            problems.input,
+                            problems.output,
                             problems.title_es,
                             problems.title_en,
                             problems.level,
@@ -428,7 +437,7 @@ function list(req, res) {
         Problem.findAndCountAll({
             where: condition,
             distinct: 'id',
-            attributes: ['id', 'title_es', 'title_en', 'level', 'user_id', 'category_id'],
+            attributes: ['id', 'title_es', 'title_en', 'level', 'user_id', 'category_id', 'input', 'output'],
             limit: limit,
             include: [
               {
@@ -514,6 +523,8 @@ function formatProblem(row) {
     return {
       id: row.dataValues.id,
       title_es: row.dataValues.title_es,
+      input: row.dataValues.input,
+      output: row.dataValues.output,
       title_en: row.dataValues.title_en,
       level: row.dataValues.level,
       approval_rate: row.dataValues.approval_rate,
@@ -536,7 +547,7 @@ function formatSubmission(row) {
       id: row.id,
       language: row.language,
       execution_time: row.execution_time,
-      language: row.language,
+      file_name: row.file_name,
       verdict: row.verdict,
       created_at: row.created_at,
       user:{
@@ -584,6 +595,7 @@ module.exports = {
     remove,
     list,
     get,
+    getDataFile,
     submit,
     validateCategory,
     getSubmissions

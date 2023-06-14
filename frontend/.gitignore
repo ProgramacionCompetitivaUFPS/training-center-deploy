@@ -29,6 +29,7 @@ Thumbs.db
 
 # Dependencies
 node_modules
+dist
 package-lock.json
 
 # Compiled files

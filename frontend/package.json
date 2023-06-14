@@ -15,13 +15,18 @@
         "aurelia-bootstrapper": "^2.3.3",
         "aurelia-chart": "^0.2.7",
         "aurelia-fetch-client": "^1.1.0",
-        "aurelia-highlightjs": "^0.1.10",
         "aurelia-notify": "^0.7.0",
         "blockly": "^3.20200924.4",
         "bluebird": "^3.4.1",
-        "bootstrap": "^4.5.3",
+        "bootstrap": "^4.6.2",
         "bootstrap-tour": "^0.12.0",
+        "clean-jsdoc-theme": "^4.1.8",
+        "codemirror": "^5.65.12",
+        "glightbox": "^3.2.0",
+        "html-loader": "^1.0.0-alpha.0",
         "intro.js": "^4.2.2",
+        "isotope": "^1.0.0-alpha.3",
+        "isotope-layout": "^3.0.6",
         "jquery": "^3.5.1",
         "nprogress": "^0.2.0",
         "popper.js": "^1.16.1",
@@ -29,9 +34,9 @@
         "showdown": "^1.6.4",
         "simplemde": "^1.11.2",
         "socket.io-client": "^2.0.4",
-        "swiper": "^7.0.5",
+        "swiper": "^7.4.1",
+        "taffydb": "^2.7.3",
         "text": "github:requirejs/text#latest",
-        "typings": "^2.1.1",
         "whatwg-fetch": "^2.0.2"
     },
     "aurelia": {
@@ -68,7 +73,6 @@
         "file-loader": "^6.2.0",
         "gulp": "^4.0.2",
         "gulp-eslint": "^6.0.0",
-        "html-loader": "1.0.0",
         "html-webpack-plugin": "^4.5.0",
         "istanbul-instrumenter-loader": "^3.0.1",
         "jest": "^26.4.2",
@@ -85,7 +89,7 @@
         "webpack": "^4.46.0",
         "webpack-bundle-analyzer": "^3.9.0",
         "webpack-cli": "^3.3.12",
-        "webpack-dev-server": "^3.11.2"
+        "webpack-dev-server": "^3.11.3"
     },
     "browserslist": [
         "defaults"
@@ -95,7 +99,8 @@
         "start": "webpack-dev-server --extractCss",
         "build:dev": "webpack --extractCss",
         "analyze": "webpack --env.production --analyze",
-        "test": "au test"
+        "test": "au test",
+        "generate-docs": "jsdoc --configure jsdoc.json --verbose"
     },
     "engines": {
         "node": ">=10.12.0"

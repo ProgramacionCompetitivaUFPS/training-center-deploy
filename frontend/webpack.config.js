@@ -252,7 +252,6 @@ module.exports = ({ production } = {}, { extractCss, analyze, tests, hmr, port, 
         ...when(!tests, new DuplicatePackageCheckerPlugin()),
         new AureliaPlugin(),
         new ModuleDependenciesPlugin({
-            'aurelia-testing': ['./compile-spy', './view-spy']
         }),
 
         new webpack.ProvidePlugin({
@@ -286,5 +285,6 @@ module.exports = ({ production } = {}, { extractCss, analyze, tests, hmr, port, 
          * `del` (https://www.npmjs.com/package/del), or `rimraf` (https://www.npmjs.com/package/rimraf).
          */
         new CleanWebpackPlugin()
+
     ]
 });

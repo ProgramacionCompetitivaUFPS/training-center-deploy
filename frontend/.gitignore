@@ -29,19 +29,17 @@ Thumbs.db
 
 # Dependencies
 node_modules
-dist
 package-lock.json
 
 # Compiled files
 /scripts
 /src/environment.js
-#/dist
 /test/coverage-jest
-bootstrap
 .scannerwork
 sonar-project.properties
 .editorconfig
 .idea
 .DS_STORE
 /src/.sonar
+/.env
 

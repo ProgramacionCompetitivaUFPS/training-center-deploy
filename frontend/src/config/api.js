@@ -4,7 +4,7 @@
  * @exports API - Objeto JSON con datos de conexión a Backend
  */
 
-import environment from '../../config/environment.json'
+import environment from './../environment';
 export let API = {
     /**
      * apiUrl debe reemplazarse por la dirección del backend

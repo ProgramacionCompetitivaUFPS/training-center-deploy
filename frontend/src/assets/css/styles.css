@@ -113,10 +113,7 @@ pre {
   /*.navbar-collapse.collapse {
         display: none !important;
     }*/
-  .navbar-nav {
-    float: none !important;
-    margin-top: 0.46875em;
-  }
+  
   .navbar-nav > li {
     float: none;
   }
@@ -576,7 +573,7 @@ hr {
 }
 
 .ufps-btn-nav a {
-  color: #eee;
+  color: #566167;
 }
 
 .ufps-card {

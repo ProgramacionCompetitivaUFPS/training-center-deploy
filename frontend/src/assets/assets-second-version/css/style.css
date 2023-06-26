@@ -94,10 +94,6 @@ h6 {
   text-transform: uppercase;
 }
 
-#header .logo a {
-  color: #556270;
-}
-
 
 /*--------------------------------------------------------------
 # Navigation Menu
@@ -2158,6 +2154,7 @@ section {
 .training-title-two{
   font-weight: 500 !important;
   font-size: x-large;
+  color: black;
 }
 
 /* Estilos generales del select */

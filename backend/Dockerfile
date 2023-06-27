@@ -4,8 +4,8 @@
 #-------------------------------------------------------------------------------#
 
 # Pull base image
-#FROM node:latest
-FROM node:carbon
+FROM node:latest
+#FROM node:carbon
 
 # Create app directory
 WORKDIR /usr/src/app
@@ -17,13 +17,8 @@ RUN apt-get update && \
       curl \
       gnupg2 \
       software-properties-common && \
-    curl -fsSL https://download.docker.com/linux/$(. /etc/os-release; echo "$ID")/gpg > /tmp/dkey; apt-key add /tmp/dkey && \
-    add-apt-repository \
-      "deb [arch=amd64] https://download.docker.com/linux/$(. /etc/os-release; echo "$ID") \
-      $(lsb_release -cs) \
-      stable" && \
-   apt-get update && \
-   apt-get -y install docker-ce
+      curl -fsSL https://get.docker.com -o /tmp/get-docker.sh && \
+      sh /tmp/get-docker.sh
 
 
 # Install app dependencies

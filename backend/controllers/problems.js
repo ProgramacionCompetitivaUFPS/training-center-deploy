@@ -203,15 +203,9 @@ function getSubmissions(req, res) {
     if (req.params.id) {
         Problem.findByPk(req.params.id).then(problem => {
             if (!problem) return res.sendStatus(404)
-
-            if (language ==='en'){
-                meta.title=problem.dataValues.title_en
-            }
-            else {
-                meta.title=problem.dataValues.title_es
-            }
-            meta.title=problem.dataValues.title_es
-
+            meta.title = problem.dataValues.title_es==null?problem.dataValues.title_en:problem.dataValues.title_es
+            meta.level=problem.dataValues.level
+            
             sequelize.query(
                 'SELECT count(s.id) AS `count` from submissions s' +
                     ' WHERE s.problem_id= :id',{replacements:{id:req.params.id}, type: Sequelize.QueryTypes.SELECT }

@@ -26,5 +26,5 @@ COPY default.conf /etc/nginx/conf.d
 # Copy files to container
 COPY /dist /usr/share/nginx/html
 
-RUN rm /usr/share/nginx/html/nginx.conf
-RUN rm /usr/share/nginx/html/default.conf
+#RUN rm /usr/share/nginx/html/nginx.conf
+#RUN rm /usr/share/nginx/html/default.conf

@@ -2,4 +2,5 @@
 /files/
 npm-debug.log
 .sql
+.idea
 

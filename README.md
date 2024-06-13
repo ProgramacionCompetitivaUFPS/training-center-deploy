@@ -16,6 +16,7 @@ Para poder ejecutar el proyecto se deben crear los siguientes directorios:
 - files/outputs
 - files/materials
 - files/codes
+- files/errors
 
 En estos directorios se almacenaran todos los archivos para el correcto funcionamiento de la plataforma.
 
